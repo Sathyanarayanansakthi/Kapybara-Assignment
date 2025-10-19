@@ -5,13 +5,39 @@ import { Input } from '@/components/ui/input'
 import React, { useState } from 'react'
 import Tiptap from '@/components/Tiptap'
 import { toast } from 'sonner'
+import { trpc } from '@/lib/trpc'
 
 const Page = () => {
+  // these hold the data
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [loading, setLoading] = useState(false)
 
+  const utils = trpc.useUtils()
+  
+  // this sends the blog to the database
+  const createMutation = trpc.blog.create.useMutation({
+    onSuccess: (data) => {
+      // show success message
+      toast.success('Blog Published! 🎉', {
+        description: `"${data.title}" has been published successfully.`,
+      })
+      // clear the form
+      setTitle('')
+      setContent('')
+      // refresh the blog list i think
+      utils.blog.getAll.invalidate()
+    },
+    onError: (error) => {
+      // if it fails show error
+      toast.error('Failed to Publish', {
+        description: error.message,
+      })
+    },
+  })
+
+  // this runs when you click publish
   const handleSubmit = async () => {
+    // check if fields are empty
     if (!title.trim() || !content.trim()) {
       toast.error('Missing Fields', {
         description: 'Please provide both title and content.',
@@ -19,44 +45,16 @@ const Page = () => {
       return
     }
 
-    setLoading(true)
+    // show loading message
     const loadingToast = toast.loading('Publishing your blog post...')
-
+    
     try {
-      const res = await fetch('/api/blog', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        console.error('Error response:', data)
-        throw new Error(data?.error || 'Failed to publish blog.')
-      }
-
+      // try to create the blog
+      await createMutation.mutateAsync({ title, content })
       toast.dismiss(loadingToast)
-      toast.success('Blog Published! 🎉', {
-        description: `"${title}" has been published successfully.`,
-      })
-
-      setTitle('')
-      setContent('')
-    } catch (err: unknown) {
+    } catch (error) {
       toast.dismiss(loadingToast)
-      
-      if (err instanceof Error) {
-        toast.error('Failed to Publish', {
-          description: err.message,
-        })
-      } else {
-        toast.error('Failed to Publish', {
-          description: 'An unknown error occurred.',
-        })
-      }
-    } finally {
-      setLoading(false)
+      // error already handled above in onError
     }
   }
 
@@ -66,6 +64,7 @@ const Page = () => {
         Create a Blog
       </h1>
 
+      {/* title input box */}
       <Input
         placeholder="Title of the Blog"
         value={title}
@@ -74,16 +73,18 @@ const Page = () => {
         type="text"
       />
 
+      {/* text editor for writing blog */}
       <div className="bg-white text-black p-4 rounded-md shadow-md">
         <Tiptap content={content} setContent={setContent} />
       </div>
 
+      {/* publish button */}
       <Button
         onClick={handleSubmit}
-        disabled={!title.trim() || !content.trim() || loading}
+        disabled={!title.trim() || !content.trim() || createMutation.isPending}
         className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold px-6 py-3"
       >
-        {loading ? 'Publishing...' : 'Publish Blog'}
+        {createMutation.isPending ? 'Publishing...' : 'Publish Blog'}
       </Button>
     </div>
   )
