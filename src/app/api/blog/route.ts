@@ -1,4 +1,4 @@
-// GET and POST methods for blog posts
+// GET, POST, PUT, and DELETE methods for blog posts
 
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -51,6 +51,90 @@ export async function POST(req: NextRequest) {
     console.error('Error creating post:', error)
     return NextResponse.json(
       { error: 'Failed to create post' },
+      { status: 500 }
+    )
+  }
+}
+
+// PUT - Update an existing blog post
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { id, title, content } = body
+
+    // Check if id is provided
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Post ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Check if title is valid
+    if (!title || !title.trim()) {
+      return NextResponse.json(
+        { error: 'Title is required' },
+        { status: 400 }
+      )
+    }
+
+    // Check if content is valid
+    if (!content || !content.trim()) {
+      return NextResponse.json(
+        { error: 'Content is required' },
+        { status: 400 }
+      )
+    }
+
+    // Update the post in database
+    const { updatePost } = await import('@/db/blogqueries')
+    const updatedPost = await updatePost(id, title.trim(), content.trim())
+
+    if (!updatedPost || updatedPost.length === 0) {
+      return NextResponse.json(
+        { error: 'Post not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(updatedPost[0], { status: 200 })
+    
+  } catch (error) {
+    console.error('Error updating post:', error)
+    return NextResponse.json(
+      { error: 'Failed to update post' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE - Delete a blog post
+export async function DELETE(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { id } = body
+
+    // Check if id is provided
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Post ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Delete the post from database
+    const { deletePost } = await import('@/db/blogqueries')
+    await deletePost(id)
+
+    return NextResponse.json(
+      { message: 'Post deleted successfully' },
+      { status: 200 }
+    )
+    
+  } catch (error) {
+    console.error('Error deleting post:', error)
+    return NextResponse.json(
+      { error: 'Failed to delete post' },
       { status: 500 }
     )
   }
