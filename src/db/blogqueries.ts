@@ -1,6 +1,3 @@
-// This file contains functions to interact with the blog database
-// It has four main functions: get all posts, create, update, and delete
-
 import { db } from '../index'
 import { blogTable } from './blogSchema'
 import { desc, eq } from 'drizzle-orm'
@@ -9,8 +6,7 @@ import { desc, eq } from 'drizzle-orm'
 export type BlogPost = typeof blogTable.$inferSelect
 export type NewBlogPost = typeof blogTable.$inferInsert
 
-// Function to get all blog posts from the database
-// Posts are sorted by newest first
+//Get All Post
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     console.log('Fetching all posts from database...')
@@ -28,8 +24,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     throw error
   }
 }
-
-// Function to create a new blog post
+//New Post
 export async function createPost(title: string, content: string): Promise<BlogPost[]> {
   try {
     console.log('Creating new post...')
@@ -51,7 +46,7 @@ export async function createPost(title: string, content: string): Promise<BlogPo
   }
 }
 
-// Function to update an existing blog post
+//Update Post
 export async function updatePost(id: number, title: string, content: string): Promise<BlogPost[]> {
   try {
     console.log('Updating post with id:', id)
@@ -75,7 +70,7 @@ export async function updatePost(id: number, title: string, content: string): Pr
   }
 }
 
-// Function to delete a blog post
+//Delete Post
 export async function deletePost(id: number): Promise<void> {
   try {
     console.log('Deleting post with id:', id)

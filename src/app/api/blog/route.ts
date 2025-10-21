@@ -1,8 +1,7 @@
 // GET, POST, PUT, and DELETE methods for blog posts
-
 import { NextRequest, NextResponse } from 'next/server'
 
-// GET - Get all blog posts
+// GET
 export async function GET() {
   try {
     const { getAllPosts } = await import('@/db/blogqueries')
@@ -19,7 +18,7 @@ export async function GET() {
   }
 }
 
-// POST - Create a new blog post
+// POST
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -56,7 +55,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT - Update an existing blog post
+// PUT
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json()
@@ -108,7 +107,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-// DELETE - Delete a blog post
+// DELETE
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json()
