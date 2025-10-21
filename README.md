@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 Next.js Blog Application
 
-## Getting Started
+A full-stack blog platform built with **Next.js 13+ App Router**, **tRPC**, **TypeScript**, **Neon (PostgreSQL)**, and **Drizzle ORM**. It includes blog creation, viewing, and structured API with modern frontend components.
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+- **Framework**: [Next.js 13+ (App Router)](https://nextjs.org/)
+- **Backend**: [tRPC](https://trpc.io/)
+- **Database**: [Neon](https://neon.tech/) (Serverless PostgreSQL)
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Styling**: Tailwind CSS (assumed)
+- **Editor**: [TipTap](https://tiptap.dev/) (Rich Text Editor)
+- **Deployment Ready**: Easily deployable to platforms like Vercel
+
+---
+
+## 📁 Folder Structure
 
 ```bash
+src/
+│
+├── app/                      # Next.js app directory
+│   ├── api/blog/trpc/        # API routes using tRPC
+│   ├── blogs/                # Blog listing page
+│   ├── createBlog/           # Blog creation page
+│   ├── layout.tsx            # Root layout
+│   ├── page.tsx              # Home page
+│
+├── components/               # UI components
+│   └── ui/                   # Navbar, Footer, Hero, etc.
+│
+├── db/                       # Drizzle schema and queries
+│   ├── blogSchema.ts         # Table definitions
+│   └── blogqueries.ts        # Custom DB queries
+│
+├── lib/                      # Utilities
+│   ├── trpc.ts               # tRPC client setup
+│   └── utils.ts              # Helper functions
+│
+├── server/                   # tRPC server setup
+│   ├── routers/              # tRPC routers
+│   ├── trpc.ts               # Router config
+│   └── index.ts              # Server handler
+│
+├── .env                      # Environment variables
+├── drizzle.config.ts         # Drizzle configuration
+├── next.config.ts            # Next.js configuration
+├── package.json
+├── tsconfig.json
+
+
+
+
+Environment Setup
+1. Clone the Repository
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+
+2. Install Dependencies
+npm install
+# or
+yarn install
+
+3. Create .env File
+
+Create a .env file in the root directory and add the following:
+
+DATABASE_URL="your_neon_database_url"
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+
+
+Replace "your_neon_database_url" with the actual connection string from your Neon
+ PostgreSQL instance.
+
+🧱 Database Setup with Drizzle + Neon
+Push schema to database:
+npx drizzle-kit push
+
+
+Make sure your drizzle.config.ts is set up correctly:
+
+import { defineConfig } from "drizzle-kit";
+
+export default defineConfig({
+  schema: "./src/db/blogSchema.ts",
+  out: "./drizzle",
+  driver: "pg",
+  dbCredentials: {
+    connectionString: process.env.DATABASE_URL!,
+  },
+});
+
+🏃 Run the Application
+Development Mode
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000
+ in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Build for Production
+npm run build
+npm start
