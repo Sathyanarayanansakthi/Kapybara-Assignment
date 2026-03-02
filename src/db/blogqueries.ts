@@ -1,22 +1,16 @@
-// This file contains functions to interact with the blog database
-// It has two main functions: get all posts and create a new post
-
 import { db } from '../index'
 import { blogTable } from './blogSchema'
-import { desc } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 
 // Types for TypeScript
-// These help us know what shape our data should have
 export type BlogPost = typeof blogTable.$inferSelect
 export type NewBlogPost = typeof blogTable.$inferInsert
 
-// Function to get all blog posts from the database
-// Posts are sorted by newest first
+//Get All Post
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     console.log('Fetching all posts from database...')
     
-    // Get all posts from the blogTable, sorted by creation date (newest first)
     const posts = await db
       .select()
       .from(blogTable)
@@ -30,14 +24,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     throw error
   }
 }
-
-// Function to create a new blog post
-// Takes a title and content, saves them to the database
+//New Post
 export async function createPost(title: string, content: string): Promise<BlogPost[]> {
   try {
     console.log('Creating new post...')
     
-    // Insert the new post into the database
     const result = await db
       .insert(blogTable)
       .values({
@@ -51,6 +42,47 @@ export async function createPost(title: string, content: string): Promise<BlogPo
     
   } catch (error) {
     console.error('Error creating post:', error)
+    throw error
+  }
+}
+
+//Update Post
+export async function updatePost(id: number, title: string, content: string): Promise<BlogPost[]> {
+  try {
+    console.log('Updating post with id:', id)
+    
+    const result = await db
+      .update(blogTable)
+      .set({
+        title: title,
+        blog: content,
+        updatedAt: new Date(),
+      })
+      .where(eq(blogTable.id, id))
+      .returning()
+    
+    console.log('Post updated successfully')
+    return result
+    
+  } catch (error) {
+    console.error('Error updating post:', error)
+    throw error
+  }
+}
+
+//Delete Post
+export async function deletePost(id: number): Promise<void> {
+  try {
+    console.log('Deleting post with id:', id)
+    
+    await db
+      .delete(blogTable)
+      .where(eq(blogTable.id, id))
+    
+    console.log('Post deleted successfully')
+    
+  } catch (error) {
+    console.error('Error deleting post:', error)
     throw error
   }
 }

@@ -1,12 +1,14 @@
 import { Toaster } from 'sonner'
 
-export default function RootLayout({ children }) {
+export default function CreateBlogLayout({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-        <Toaster position="top-right" richColors />
-      </body>
-    </html>
+    <>
+      {children}
+      <Toaster position="top-right" richColors />
+    </>
   )
 }

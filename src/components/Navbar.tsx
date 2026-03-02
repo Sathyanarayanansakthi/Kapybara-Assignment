@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, PenTool } from 'lucide-react';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,24 +23,18 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-700 hover:text-indigo-600 font-medium transition-colors">
+            <Link href="/blogs" className="text-gray-700 hover:text-indigo-600 font-medium transition-colors">
               Stories
-            </a>
-            <a href="#" className="text-gray-700 hover:text-indigo-600 font-medium transition-colors">
-              Writers
-            </a>
+            </Link>
             <a href="#" className="text-gray-700 hover:text-indigo-600 font-medium transition-colors">
               About
             </a>
-            <Button 
-              variant="outline" 
-              className="border-indigo-600 text-indigo-600 hover:bg-indigo-50"
-            >
-              Login
-            </Button>
-            <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
-              Get Started
-            </Button>
+
+            <Link href='/createBlog'>
+              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+                Create Blog
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -58,17 +53,11 @@ const Navbar = () => {
               Stories
             </a>
             <a href="#" className="block py-2 text-gray-700 hover:text-indigo-600 font-medium">
-              Writers
-            </a>
-            <a href="#" className="block py-2 text-gray-700 hover:text-indigo-600 font-medium">
               About
             </a>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button variant="outline" className="w-full border-indigo-600 text-indigo-600">
-                Login
-              </Button>
               <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-                Get Started
+                Create Blog
               </Button>
             </div>
           </div>
@@ -78,5 +67,4 @@ const Navbar = () => {
   );
 };
 
-
-export default Navbar
+export default Navbar;

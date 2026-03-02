@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button';
 import { Sparkles, PenTool, BookOpen } from 'lucide-react';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
@@ -32,6 +33,7 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Link href='/createBlog'>
             <Button
               size="lg"
               className="px-8 py-6 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -39,6 +41,9 @@ const HeroSection = () => {
               <PenTool className="w-5 h-5 mr-2" />
               Start Writing Free
             </Button>
+            </Link>
+
+            <Link href='/blogs'>
             <Button
               size="lg"
               variant="outline"
@@ -47,6 +52,8 @@ const HeroSection = () => {
               <BookOpen className="w-5 h-5 mr-2" />
               Explore Stories
             </Button>
+            </Link>
+            
           </div>
         </div>
       </div>

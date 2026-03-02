@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/HeroSection'
+import Footer from '@/components/Footer'
 import React from 'react'
 
 const page = () => {
@@ -7,6 +8,7 @@ const page = () => {
     <div>
       <Navbar/>
       <HeroSection />
+      <Footer />
     </div>
   )
 }
